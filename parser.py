@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup
 
 # simply try out fetching the webpage
 
-"""
+
 http_proxy  = "http://web-proxy.tencent.com:8080"
 https_proxy = "https://web-proxy.tencent.com:8080"
 
@@ -27,7 +27,7 @@ proxyDict = {
               "https" : https_proxy, 
             }
 
-"""
+
 
 # hard code target address for now
 
@@ -63,8 +63,8 @@ def main():
     
     for time_version, url in url_list:
         user_agent = {'User-agent': 'Mozilla/5.0'}
-        # req = requests.get(url, headers=user_agent, proxies=proxyDict)
-        req = requests.get(url, headers=user_agent)
+        req = requests.get(url, headers=user_agent, proxies=proxyDict)
+        # req = requests.get(url, headers=user_agent)
 
         if req.status_code != 200:
             # if no success
@@ -72,7 +72,7 @@ def main():
             print(msg, file=sys.stderr)
             continue
         # unified all text with utf8 encoding
-        req.encoding('utf-8')
+        # req.encoding('utf-8')
         
         # parsing the HTML
         html_doc = req.text
@@ -125,10 +125,10 @@ def main():
             os.makedirs(dirname)
             
         # write up the output file
-        with open(output_filename, 'wb') as output_file:
-            print(b'time_version,code,area', file=output_file)
+        with open(output_filename, 'w', encoding='utf8', newline='') as output_file:
+            print('time_version,code,area', file=output_file)
             writer = csv.writer(output_file)
-            version =  time_version * len(code)
+            version = [time_version] * len(code)
             writer.writerows(zip(version, code, area))
             
         output_file.close()    
